@@ -29,7 +29,7 @@ VALUES
 -- Animais disponíveis e cadastradores
 SELECT a.Nome AS Animal, a.Especie, a.Idade, u.Nome AS Cadastrado_Por, u.Contato
 FROM Animal a
-JOIN Usuario u ON a.idUsuario = u.id
+JOIN Usuario u ON a.idUsuario = u.idUsuario  -- era u.id
 WHERE a.Status = 'Disponível';
 
 -- Fluxo de adoção: solicitação, formalização e atualização
@@ -44,4 +44,4 @@ VALUES ('2026-06-18', 1);
 -- 3. Atualizar status do animal
 UPDATE Animal 
 SET Status = 'Adotado' 
-WHERE Id_animal = 1;
+WHERE idAnimal = 1;  -- era Id_animal
