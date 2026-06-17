@@ -1,0 +1,60 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // ou "postgresql", "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                  Int                   @id @default(autoincrement())
+  nome                String
+  endereco            String?
+  email               String                @unique
+  contato             String?
+  animaisCadastrados  Animal[]              // Relação (1,n) - Animais que o usuário cadastrou
+  solicitacoesAdocao  SolicitacaoDeAdocao[] // Relação (1,n) - Solicitações feitas pelo usuário
+}
+
+model Animal {
+  id_animal           Int                   @id @default(autoincrement())
+  nome                String
+  especie             String
+  raca                String?
+  idade               Int?
+  sexo                String                @db.Char(1)
+  status              String
+  idUsuario           Int
+  usuario             Usuario               @relation(fields: [idUsuario], references: [id])
+  vacinas             Vacinas[]             // Relação (1,n) com Vacinas
+  solicitacoesAdocao  SolicitacaoDeAdocao[] // Relação (1,n) com Solicitações
+}
+
+model Vacinas {
+  id_vacina           Int                   @id @default(autoincrement())
+  nome_vacina         String
+  data_aplicacao      DateTime              @db.Date
+  idAnimal            Int
+  animal              Animal                @relation(fields: [idAnimal], references: [id_animal])
+}
+
+model SolicitacaoDeAdocao {
+  id_solicitacao      Int                   @id @default(autoincrement())
+  data_hora           DateTime              @default(now())
+  status              String
+  idUsuario           Int
+  idAnimal            Int
+  usuario             Usuario               @relation(fields: [idUsuario], references: [id])
+  animal              Animal                @relation(fields: [idAnimal], references: [id_animal])
+  adocao              Adocao?               // Relação (0,1) com Adoção finalizada
+}
+
+model Adocao {
+  id_adocao               Int                 @id @default(autoincrement())
+  data_adocao             DateTime            @db.Date
+  idSolicitacao_de_adocao Int                 @unique // Garantia da relação 1:1
+  solicitacao             SolicitacaoDeAdocao @relation(fields: [idSolicitacao_de_adocao], references: [id_solicitacao])
+}
