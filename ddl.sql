@@ -22,7 +22,7 @@ CREATE TABLE Animal (
     Sexo CHAR(1),
     Status VARCHAR(50),
     idUsuario INT,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id) -- removido ON DELETE CASCADE (ver explicação acima)
 );
 
 CREATE TABLE Vacinas (
@@ -46,6 +46,6 @@ CREATE TABLE Solicitacao_de_adocao (
 CREATE TABLE Adocao (
     Id_adocao INT PRIMARY KEY AUTO_INCREMENT,
     Data_adocao DATE NOT NULL,
-    idSolicitacao_de_adocao INT UNIQUE, -- UNIQUE para garantir 1:1 de acordo com o diagrama conceitual
+    idSolicitacao_de_adocao INT UNIQUE NOT NULL, -- UNIQUE para garantir 1:1; NOT NULL adicionado
     FOREIGN KEY (idSolicitacao_de_adocao) REFERENCES Solicitacao_de_adocao(Id_solicitacao)
 );
